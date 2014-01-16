@@ -24,6 +24,11 @@ while True:
     header = "Content-Type:  text/html\r\n\r\n"
     body = "<h1>Hello, world</h1> this is msweet18's web server."
     message = init + header + body
-    
     c.send(message)
     c.close()
+
+    # @comment this code looks good, and it runs well on Firefox.
+    # I checked if it works on other browsers, and it doesn't work
+    # on Chrome or Internet Explorer. I can't seem to fix it..
+    # You used spaces instead of tabs so that's good and you spelled
+    # the variable names properly. 
