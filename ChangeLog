@@ -7,3 +7,13 @@
  * Modified server.py to send status line, content type, and body message.
  * Added print c.recv(1000) to see what happens. It seems to print out the
    client's information
+
+2014-01-20  Seung Yi
+
+ * Took out c.recv(1000)
+ * Edited server.py so matches the instructor's copy.
+
+2014-01-23 Seung Yi
+
+ * Changed handle_connection function to handle POST and GET properly.
+ * Modified test_server.py to test updated handle_connection function.
