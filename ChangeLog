@@ -17,3 +17,10 @@
 
  * Changed handle_connection function to handle POST and GET properly.
  * Modified test_server.py to test updated handle_connection function.
+
+2014-01-30 Seung Yi
+
+ * Splited handle_connection into seperate functions.
+ * Added handle_error and handle_submit functions.
+ * Added a form page to take your first and last name to submit.
+ * Modified test_server.py to test new functions.
