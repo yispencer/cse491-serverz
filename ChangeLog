@@ -24,3 +24,13 @@
  * Added handle_error and handle_submit functions.
  * Added a form page to take your first and last name to submit.
  * Modified test_server.py to test new functions.
+
+2014-02-06 Seung Yi
+
+ * Modified the send-post-request to send multipart/form-data by adding a file parameter.
+ * form works with both multipart/form-data and application/x-www-form-urlencoded
+ * submission.
+ * Tweaked handle_connection so that recv(1000) to be used with an arbitrary size
+ * instead of 1000.
+ * handle_connection uses HTML and templates instead of directly sending responses.
+
