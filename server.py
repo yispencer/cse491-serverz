@@ -2,12 +2,11 @@
 import random
 import socket
 import time
-import urlparse
+from urlparse import urlparse, parse_qs
+import cgi
+from StringIO import StringIO
+import jinja2
 
-header = 'HTTP/1.0 200 OK\r\n' + \
-         'Content-type: text/html\r\n' + \
-         '\r\n'
- 
 def main():
 
     s = socket.socket()         # Create a socket object
@@ -27,115 +26,59 @@ def main():
         print 'Got connection from', client_host, client_port
         handle_connection(c);
 
-def handle_index(conn,url):
-
-    # handle the main page
-
-    conn.send(header + \
-              '<h1>Hello, world.</h1>' + \
-              'This is yispencer\'s Web server.<br><br>' + \
-              '<A HREF="/content">Content Page</A><br>' + \
-              '<A HREF="/file">File Page</A><br>' + \
-              '<A HREF="/image">Image Page</A><br>' + \
-              '<A HREF="/form">Form Page</A>')
-
-def handle_content(conn,url):
-
-    # handle the content page
-
-    conn.send(header + \
-              'This is content page.')
-
-def handle_file(conn,url):
-
-    # handle the file page
-
-    conn.send(header + \
-              'This is file page.')
- 
-def handle_image(conn,url): 
-
-    # handle the image page
-
-    conn.send(header + \
-              'This is image page.')
-
-def handle_post(conn,url):
-
-    # handle the post request
-
-    conn.send(header + \
-              'POST requested...\r\n' + \
-              'Hello, world.')
-
-def handle_error(conn,url):
-
-    # handle pages not sepecified 
-
-    conn.send(header + \
-              '<h1>ERROR</h>')
-
-def handle_form(conn,url):
-
-    # handle the form page
-
-    conn.send(header + \
-              "<form action='/submit' method='GET'>\n" + \
-              "first name: <input type='text' name='firstname'>\n" + \
-              "last name: <input type='text' name='lastname'>\n" + \
-              "<input type='submit' value='Submitz'>\n\n" + \
-              "</form>")
-
-def handle_submit(conn,url):
-
-    # handle the submit page
-
-    query = url.split("&")
-    firstname = query[0].split("=")[1]
-    lastname = query[1].split("=")[1] 
-    conn.send(header + \
-              "Hi Mr. %s %s." % (firstname, lastname))
-
 def handle_connection(conn):
   
-    # get the method type and the path
+    # Break down the request into parts 
+    recv = conn.recv(1)
+    while recv[-4:] != '\r\n\r\n':
+        recv += conn.recv(1)
+
+    raw_request, raw_headers = recv.split('\r\n',1)
+    raw_request = raw_request.split(' ')
  
-    recv = conn.recv(1000) 
-    first_line = recv.splitlines()[0].split(' ')
-    method = first_line[0]
-    url = urlparse.urlparse(first_line[1])
+    # Putting all of the request headers into a dictionary
+    a_dict = {}
+    for line in raw_headers.split('\r\n')[:-2]:
+        k,v = line.split(":",1)
+        a_dict[k.lower()] = v
+
+    method = raw_request[0]
+    url = urlparse(raw_request[1])
     parsed_path = url[2]
 
+    # Pages we know that exist
+    response = {
+                '/'        : 'index.html',   \
+                '/content' : 'content.html', \
+                '/file'    : 'file.html',    \
+                '/image'   : 'image.html',   \
+                '/form'    : 'form.html',    \
+                '/submit'  : 'submit.html',  \
+               }
+    # Basic connection information and set up templates from brtaylor92's repo
+    loader = jinja2.FileSystemLoader('./templates')
+    env = jinja2.Environment(loader=loader)
+    retval = 'HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n'
+    data = ''
     # send appropriate data
-
+    args = parse_qs(url[4]) 
     if method == "POST":
-         if parsed_path == "/":
-              handle_post(conn,'')
-         elif parsed_path == "/submit":
-              handle_submit(conn,recv.split('\r\n')[-1]) 
-    
-    elif parsed_path == "/": 
-         handle_index(conn,'')
-   
-    elif parsed_path == "/content": 
-         handle_content(conn,'')
-  
-    elif parsed_path == "/file":
-         handle_file(conn,'')
- 
-    elif parsed_path == "/image":
-         handle_image(conn,'')
-
-    elif parsed_path == "/form":
-         handle_form(conn,'')
-    
-    elif parsed_path == "/submit":
-         handle_submit(conn,url[4])
-
+         # Add the content portion of the request to the dictionary
+         length = int(a_dict['content-length'])
+         while len(data) < length:
+             data += conn.recv(1)
+    form = cgi.FieldStorage(fp=StringIO(data), headers=a_dict, \
+                            environ={'REQUEST_METHOD' : 'POST'})
+    args.update(dict([(x, [form[x].value]) for x in form.keys()]))
+         
+    if url[2] in response:
+        template = env.get_template(response[url[2]])
     else:
-         handle_error(conn,'')
-
-
+        args['path'] = url[2]
+        retval = 'HTTP/1.0 404 Not Found\r\n\r\n'
+        template = env.get_template('404.html') 
+    retval += template.render(args)
+    conn.send(retval) 
     conn.close()
 
 if __name__ == '__main__':
