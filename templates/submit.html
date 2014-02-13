@@ -1,5 +1,4 @@
-<html>
-	<body>
-		Hi, {{ firstname[0] }} {{ lastname[0] }}.
-	</body>
-</html>	
+{% extends "base.html" %}
+{% block content %}
+	Hi, {{ firstname }} {{ lastname }}.
+{% endblock %}

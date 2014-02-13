@@ -67,7 +67,7 @@ def test_handle_form():
 
 def test_404():
     conn = FakeConnection("GET /404 HTTP/1.0\r\n\r\n")
-    er = 'HTTP/1.0 404 Not Found\r\n\r\n'
+    er = 'HTTP/1.0 404 Not Found\r\n'
 
     server.handle_connection(conn)
 
@@ -131,6 +131,6 @@ def test_submit_post_404():
                          )
     server.handle_connection(conn)
 
-    er = 'HTTP/1.0 404 Not Found\r\n\r\n'
+    er = 'HTTP/1.0 404 Not Found\r\n'
 
     assert conn.sent[:len(er)] == er, 'Got: %s' % (repr(conn.sent),)
