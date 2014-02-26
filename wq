@@ -1,0 +1,66 @@
+commit 42f1db18e9a8bd74a4b4a7ddeca6e5f9d2db649a
+Author: Seung Yi <yiseung@arctic.cse.msu.edu>
+Date:   Thu Jan 30 02:23:59 2014 -0500
+
+    hw3
+
+commit de8306f7d82e0a6fb1817241b104a8046c3f422a
+Author: Seung Yi <yiseung@arctic.cse.msu.edu>
+Date:   Thu Jan 23 00:18:00 2014 -0500
+
+    homework 2
+
+commit 45dbc9bc8707657a5d34cbc266975b051d271603
+Merge: 9fac19f 239ea08
+Author: Seung Yi <yiseung@arctic.cse.msu.edu>
+Date:   Mon Jan 20 20:28:20 2014 -0500
+
+    Merge branch 'hw2' of https://github.com/ctb/cse491-serverz into hw2
+
+commit 239ea0830683d12e12b9a441d4d422da8eb19a19
+Author: C. Titus Brown <titus@idyll.org>
+Date:   Thu Jan 16 23:12:21 2014 -0500
+
+    added send-post-request
+
+commit b26ff8a63397b445394aca0ed57f718bf5e4ce34
+Author: C. Titus Brown <titus@idyll.org>
+Date:   Thu Jan 16 22:53:26 2014 -0500
+
+    added comments.
+
+commit 408817bb93d8fc6ddd878bfefd748099982cf332
+Author: C. Titus Brown <titus@idyll.org>
+Date:   Thu Jan 16 22:51:19 2014 -0500
+
+    test code for hw2
+
+commit 9fac19f5469bfb63a45d8aaf8444b4e660ff4f85
+Author: Seung Yi <yiseung@arctic.cse.msu.edu>
+Date:   Thu Jan 16 00:34:10 2014 -0500
+
+    Modded server.py and updated ChangLog
+
+commit beea58d64e3dbf23ce627308946bb3ef93e3b899
+Author: Seung Yi <yiseung@arctic.cse.msu.edu>
+Date:   Thu Jan 16 00:21:45 2014 -0500
+
+    my changes
+
+commit 1fd1dce640a9dfc1181cedc25d91a0eb48f2b6e0
+Author: C. Titus Brown <titus@idyll.org>
+Date:   Tue Jan 7 22:15:40 2014 -0500
+
+    updated for HW 1
+
+commit 8a54f5dcc77113a945e4c4cf57f8604722e1cfbd
+Author: C. Titus Brown <titus@idyll.org>
+Date:   Tue Jan 7 17:13:15 2014 -0500
+
+    ancillary files
+
+commit 2357ebe41a59d15afb33e96c06f3f0948e40b001
+Author: C. Titus Brown <titus@idyll.org>
+Date:   Tue Jan 7 17:12:47 2014 -0500
+
+    initial commit of server.py
