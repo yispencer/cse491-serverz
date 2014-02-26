@@ -5,11 +5,16 @@ import time
 from urlparse import urlparse, parse_qs
 from StringIO import StringIO
 from app import make_app
+from wsgiref.validate import validator
+from sys import stderr
 
-def main():
+def main(socketmodule = None):
 
-    s = socket.socket()         # Create a socket object
-    host = socket.getfqdn() # Get local machine name
+    if socketmodule is None:
+        socketmodule = socket
+
+    s = socketmodule.socket()         # Create a socket object
+    host = socketmodule.getfqdn() # Get local machine name
     port = random.randint(8000, 9999)
     s.bind((host, port))        # Bind to the port
 
@@ -23,12 +28,16 @@ def main():
         # Establish connection with client.    
         c, (client_host, client_port) = s.accept()
         print 'Got connection from', client_host, client_port
-        handle_connection(c);
+        handle_connection(c, client_port);
 
-def handle_connection(conn):
+def handle_connection(conn,port):
   
     # Break down the request into parts 
     recv = conn.recv(1)
+    if not recv:
+        print 'Error'
+        return
+
     env = {}
     while recv[-4:] != '\r\n\r\n':
         recv += conn.recv(1)
@@ -50,7 +59,16 @@ def handle_connection(conn):
     env['PATH_INFO'] = url[2]
     env['QUERY_STRING'] = url[4]
     env['CONTENT_TYPE'] = 'text/html'
-    env['CONTENT_LENGTH'] = 0
+    env['CONTENT_LENGTH'] = str(0)
+    env['SCRIPT_NAME'] = ''
+    env['SERVER_NAME'] = socket.getfqdn()
+    env['SERVER_PORT'] = str(port)
+    env['wsgi.version'] = (1, 0)
+    env['wsgi.errors'] = stderr
+    env['wsgi.multithread'] = False
+    env['wsgi.multiprocess'] = False
+    env['wsgi.run_once'] = False
+    env['wsgi.url_scheme'] = 'http'
 
     def start_response(status, response_headers):
         conn.send('HTTP/1.0 ')
@@ -71,6 +89,7 @@ def handle_connection(conn):
 
     env['wsgi.input'] = StringIO(content)
     appl = make_app()
+    validator_app = validator(appl)
     result = appl(env, start_response)
     for data in result:
         conn.send(data)
