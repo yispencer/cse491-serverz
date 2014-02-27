@@ -34,3 +34,12 @@
  * instead of 1000.
  * handle_connection uses HTML and templates instead of directly sending responses.
 
+2014-02-13 Seung Yi
+
+ * Seperated server.py into two files, app.py and server.py
+ * WSGI app added and appropriate templates
+
+2014-02-25 Seung Yi
+
+ * The app servers files and images now.
+ * WSGIRef validator used to evaluate the WSGI app
