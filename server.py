@@ -8,6 +8,17 @@ from app import make_app
 from wsgiref.validate import validator
 from sys import stderr
 
+# Quixote
+# import quixote
+# from quixote.demo.altdemo import create_publisher
+# p = create_publisher()
+
+# Imageapp
+# import quixote
+# import imageapp
+# imageapp.setup()
+# p = imageapp.create_publisher()
+
 def main(socketmodule = None):
 
     if socketmodule is None:
@@ -34,22 +45,23 @@ def handle_connection(conn,port):
   
     # Break down the request into parts 
     recv = conn.recv(1)
-    if not recv:
-        print 'Error'
-        return
 
     env = {}
     while recv[-4:] != '\r\n\r\n':
-        recv += conn.recv(1)
+        new = conn.recv(1)
+        if new == '':
+            return
+        else:
+            recv += new
 
     raw_request, raw_headers = recv.split('\r\n',1)
     raw_request = raw_request.split(' ')
  
     # Putting all of the request headers into a dictionary
-    a_dict = {}
+    header_dict = {}
     for line in raw_headers.split('\r\n')[:-2]:
         k,v = line.split(":",1)
-        a_dict[k.lower()] = v
+        header_dict[k.lower()] = v
 
     method = raw_request[0]
     url = urlparse(raw_request[1])
@@ -69,6 +81,7 @@ def handle_connection(conn,port):
     env['wsgi.multiprocess'] = False
     env['wsgi.run_once'] = False
     env['wsgi.url_scheme'] = 'http'
+    env['HTTP_COOKIE'] = header_dict['cookie'] if 'cookie' in header_dict.keys() else '' 
 
     def start_response(status, response_headers):
         conn.send('HTTP/1.0 ')
@@ -82,15 +95,25 @@ def handle_connection(conn,port):
     content = ''
     if method == 'POST':
         env['REQUEST_METHOD'] = 'POST'
-        env['CONTENT_LENGTH'] = a_dict['content-length']
-        env['CONTENT_TYPE'] = a_dict['content-type']
-        while len(content) < int(a_dict['content-length']):
+        env['CONTENT_LENGTH'] = str(header_dict['content-length'])
+        env['CONTENT_TYPE'] = header_dict['content-type']
+        while len(content) < int(header_dict['content-length']):
             content += conn.recv(1)
 
     env['wsgi.input'] = StringIO(content)
-    appl = make_app()
-    validator_app = validator(appl)
-    result = appl(env, start_response)
+
+    # app.py
+    wsgi_app = make_app()
+    
+    # Quixote alt.demo
+    # wsgi_app = quixote.get_wsgi_app()
+
+    # Imageapp
+    # wsgi_app = quixote.get_wsgi_app()
+
+    wsgi_app = validator(wsgi_app)
+    result = wsgi_app(env, start_response)
+
     for data in result:
         conn.send(data)
     conn.close() 
