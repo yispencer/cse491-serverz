@@ -101,15 +101,16 @@ def handle_connection(conn, port):
     env['wsgi.input'] = StringIO(content)
     
     # app.py
-    # wsgi_app = make_app()
+    wsgi_app = make_app()
     
     # Quixote alt.demo
     # wsgi_app = quixote.get_wsgi_app()
 
     # Imageapp
-    wsgi_app = quixote.get_wsgi_app()
+    # wsgi_app = quixote.get_wsgi_app()
 
-    # wsgi_app = validator(wsgi_app)
+    wsgi_app = validator(wsgi_app)
+    
     result = wsgi_app(env, start_response)
 
     for data in result:
