@@ -39,9 +39,9 @@ def main(socketmodule = None):
         # Establish connection with client.    
         c, (client_host, client_port) = s.accept()
         print 'Got connection from', client_host, client_port
-        handle_connection(c, client_port);
+        handle_connection(c, port);
 
-def handle_connection(conn,port):
+def handle_connection(conn, port):
   
     # Break down the request into parts 
     recv = conn.recv(1)
@@ -55,19 +55,16 @@ def handle_connection(conn,port):
             recv += new
 
     raw_request, raw_headers = recv.split('\r\n',1)
-    raw_request = raw_request.split(' ')
  
     # Putting all of the request headers into a dictionary
     header_dict = {}
     for line in raw_headers.split('\r\n')[:-2]:
-        k,v = line.split(":",1)
+        k,v = line.split(': ', 1)
         header_dict[k.lower()] = v
-
-    method = raw_request[0]
-    url = urlparse(raw_request[1])
-    parsed_path = url[2]
-
-    env['REQUEST_METHOD'] = 'GET'
+    
+    url = urlparse(raw_request.split(' ', 3)[1])
+   
+    env['REQUEST_METHOD'] = 'GET' 
     env['PATH_INFO'] = url[2]
     env['QUERY_STRING'] = url[4]
     env['CONTENT_TYPE'] = 'text/html'
@@ -81,7 +78,8 @@ def handle_connection(conn,port):
     env['wsgi.multiprocess'] = False
     env['wsgi.run_once'] = False
     env['wsgi.url_scheme'] = 'http'
-    env['HTTP_COOKIE'] = header_dict['cookie'] if 'cookie' in header_dict.keys() else '' 
+    env['HTTP_COOKIE'] = header_dict['cookie'] \
+                         if 'cookie' in header_dict.keys() else '' 
 
     def start_response(status, response_headers):
         conn.send('HTTP/1.0 ')
@@ -93,7 +91,7 @@ def handle_connection(conn,port):
         conn.send('\r\n')
     
     content = ''
-    if method == 'POST':
+    if raw_request.startswith('POST '):
         env['REQUEST_METHOD'] = 'POST'
         env['CONTENT_LENGTH'] = str(header_dict['content-length'])
         env['CONTENT_TYPE'] = header_dict['content-type']
@@ -101,17 +99,17 @@ def handle_connection(conn,port):
             content += conn.recv(1)
 
     env['wsgi.input'] = StringIO(content)
-
+    
     # app.py
-    wsgi_app = make_app()
+    # wsgi_app = make_app()
     
     # Quixote alt.demo
     # wsgi_app = quixote.get_wsgi_app()
 
     # Imageapp
-    # wsgi_app = quixote.get_wsgi_app()
+    wsgi_app = quixote.get_wsgi_app()
 
-    wsgi_app = validator(wsgi_app)
+    # wsgi_app = validator(wsgi_app)
     result = wsgi_app(env, start_response)
 
     for data in result:
