@@ -37,6 +37,13 @@ def Image(env, **kwargs):
     kwargs['path'] = '/images/'+choice(listdir('images'))
     return serveFile(env, **kwargs)
 
+def ImageList(env, **kwargs):
+    response_headers = [('Content-type', 'text/html; charset"UTF-8"')]
+    kwargs['images'] = listdir('images')
+    template = env.get_template('imagelist.html')
+    data = [template.render(kwargs).encode('utf-8')]
+    return (response_headers, data)
+
 def File(env, **kwargs):
     kwargs['path'] = '/files/'+choice(listdir('files'))
     return serveFile(env, **kwargs)
@@ -62,13 +69,14 @@ def fail(env, **kwargs):
 def app(environ, start_response):
     # pages we know that exist
     response = {
-                '/'          : index,   \
-                '/content'   : content, \
-                '/file'      : File,    \
-                '/image'     : Image,   \
-                '/form'      : Form,    \
-                '/submit'    : submit,  \
-                '404'        : fail,    \
+                '/'          : index,     \
+                '/content'   : content,   \
+                '/file'      : File,      \
+                '/image'     : Image,     \
+                '/imagelist' : ImageList, \
+                '/form'      : Form,      \
+                '/submit'    : submit,    \
+                '404'        : fail,      \
                }
 
     for page in listdir('images'):
