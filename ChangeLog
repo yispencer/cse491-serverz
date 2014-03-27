@@ -43,3 +43,10 @@
 
  * The app servers files and images now.
  * WSGIRef validator used to evaluate the WSGI app
+
+2014-03-20 Seung Yi
+
+ * Changed the server.py to work with command line arguments.
+ * Added twill test for Myapp.
+ * Swiped a css template from oswd.org and integrated it into imageapp.
+ * 

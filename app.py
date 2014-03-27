@@ -62,13 +62,13 @@ def fail(env, **kwargs):
 def app(environ, start_response):
     # pages we know that exist
     response = {
-                '/'        : index,   \
-                '/content' : content, \
-                '/file'    : File,    \
-                '/image'   : Image,   \
-                '/form'    : Form,    \
-                '/submit'  : submit,  \
-                '404'      : fail,    \
+                '/'          : index,   \
+                '/content'   : content, \
+                '/file'      : File,    \
+                '/image'     : Image,   \
+                '/form'      : Form,    \
+                '/submit'    : submit,  \
+                '404'        : fail,    \
                }
 
     for page in listdir('images'):
