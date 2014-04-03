@@ -18,8 +18,12 @@ def main(socketmodule = None):
     host = socketmodule.getfqdn() # Get local machine name
     argParser = argparse.ArgumentParser(description = 'Set up WSGI server')
     argParser.add_argument('-A', metavar='App', type=str, nargs=1, \
-                           default = 'myapp', \
-                           choices=['myapp', 'imageapp', 'altdemo'], \
+                           default = 'myapp',   \
+                           choices=['myapp',    \
+                                    'imageapp', \
+                                    'altdemo',  \
+                                    'chat',     \
+                                    'quotes'],  \
                            help='Select which app to run', dest='app')
     argParser.add_argument('-p', metavar='Port', type=int, nargs=1, \
                            default = -1, help='Select a port to run on', \
@@ -123,6 +127,17 @@ def handle_connection(conn, port, app):
         imageapp.setup()
         wsgi_app = quixote.get_wsgi_app() 
 
+    # Chat app
+    elif app == 'chat':
+        from chat.apps import ChatApp as make_app 
+        wsgi_app = make_app('chat/html')
+ 
+    #quotes app
+    elif app == 'quotes':
+        from quotes.apps import QuotesApp as make_app 
+        wsgi_app = make_app('quotes/quotes.txt', \
+                                          'quotes/html')    
+    
     # My app
     else:
         from app import make_app

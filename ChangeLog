@@ -49,4 +49,12 @@
  * Changed the server.py to work with command line arguments.
  * Added twill test for Myapp.
  * Swiped a css template from oswd.org and integrated it into imageapp.
- * 
+ 
+2014-03-27 Seung Yi
+
+ * chat app and quotes app are integrated into myapp. 
+   To run those apps, type : python2.7 server.py -A chat 
+                          or python2.7 server.py -A quotes
+ 
+ * Added a thumbnail page on the dafault page(myapp).
+   The page shows all the images in thumbnails. 
