@@ -71,3 +71,10 @@
  * Search by the name or description
  * HW10 is... not... done... got an exam tomorrow for another class
  * Time is running out and I'm in panic mode
+
+2014-04-10 Seung Yi
+
+ * Cookieapp added. Run the app by typing -A cookie
+ * Imageapp stores images in a SQL database named 'images.sqlites'
+ * image name and description is stored
+ * image search function is now broken..(will have to learn some more SQL)
