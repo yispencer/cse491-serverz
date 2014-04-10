@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html">
+    <style type="text/css">{% include "layout.css" %}</style>
+  </head>
+  
+  <body>
+    <div id="container">
+      <div id="banner">
+        <div id="bannertitle">CSS Layout Template</div>
+      </div>
+      <div>
+        <div>
+          <div id="left">
+            <div class="verticalmenu">
+              <form enctype='multipart/form-data' action='image_upload' method='POST'>
+              <p>Upload an Image: <input type='file' name='file'></p>
+              <p>Description: <input type="text" name="description"></p>
+              <input type='submit'>
+              </form>
+<img src='latest_image?t={{ time }}'/>
+<h1>Name: {{ name }}</h1>
+<h1>Description: {{ description }}</h1>
+</body>            </div>
+          </div>
+
+          <div id="content">
+
+{% block content %}
+{% endblock %}
+
+          </div>
+        </div>
+      </div>
+      <div id="footer"></div>
+    </div>
+  </body>
+</html>
