@@ -58,3 +58,16 @@
  
  * Added a thumbnail page on the dafault page(myapp).
    The page shows all the images in thumbnails. 
+
+2014-04-02 Seung Yi
+
+ * Imageapp is buggy; problem with displaying the latest image
+ * Tried to fix it but could not find where this is coming from
+ * Tried copying and pasting other students' imageapp to see if
+   the problem still remains.
+ * Looks like the problem does not go away even after I copy and paste
+   someone's entire imageapp.
+ * Metadata to pictures to add image name and description
+ * Search by the name or description
+ * HW10 is... not... done... got an exam tomorrow for another class
+ * Time is running out and I'm in panic mode
