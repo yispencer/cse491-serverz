@@ -78,3 +78,10 @@
  * Imageapp stores images in a SQL database named 'images.sqlites'
  * image name and description is stored
  * image search function is now broken..(will have to learn some more SQL)
+ * Projects done(so far 30pts): 
+ 3. Swipe a template from oswd.org and put it in place on your imageapp server. (5 pts; browser_app)
+ 4. Change imageapp to support JPEG and TIFF. (5 pts; app_feature)
+ 5. Add a URL that provides a list of images, resized to thumbnails. (5 pts; app_feature)
+ 6. Add image "metadata" uploading, storage, and retrieval: image name, description, etc. (5 pts; app_feature)
+ 7. Add image metadata search (find image by ...) (5 pts.; app_feature) (BROKEN, GOTTA FIX IT)
+ 23. Write a URL handler so that each image is referred to by its number, e.g. /image_raw/10; make it so that going to the latest image in your imageapp redirects to the right image number. (5 pts; app_feature)

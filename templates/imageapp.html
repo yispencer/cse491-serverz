@@ -19,14 +19,14 @@
               <p>Description: <input type="text" name="description"></p>
               <input type='submit'>
               </form>
-<img src='latest_image?t={{ time }}'/>
-<h1>Name: {{ name }}</h1>
-<h1>Description: {{ description }}</h1>
+
 </body>            </div>
           </div>
 
           <div id="content">
-
+<img width=40% src='latest_image?t={{ time }}'/>
+<h1>Name: {{ name }}</h1>
+<h1>Description: {{ description }}</h1>
 {% block content %}
 {% endblock %}
 
