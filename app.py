@@ -5,6 +5,10 @@ from os import listdir
 from random import choice
 from StringIO import StringIO
 
+def render_template(env, filename, vars ={}):
+    template = env.get_template(filename)
+    return template.render(vars).encode('latin-1', 'replace')
+
 def fileData(fname):
     fp = open(fname, 'rb')
     data = [fp.read()]
