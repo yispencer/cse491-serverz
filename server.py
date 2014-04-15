@@ -5,9 +5,11 @@ import time
 from urlparse import urlparse, parse_qs
 from StringIO import StringIO
 from app import make_app
+from imageapp import make_image_app
 from wsgiref.validate import validator
 from sys import stderr
 import argparse
+import cookieapp
 
 def main(socketmodule = None):
 
@@ -23,7 +25,8 @@ def main(socketmodule = None):
                                     'imageapp', \
                                     'altdemo',  \
                                     'chat',     \
-                                    'quotes'],  \
+                                    'quotes',  \
+                                    'cookie'],  \
                            help='Select which app to run', dest='app')
     argParser.add_argument('-p', metavar='Port', type=int, nargs=1, \
                            default = -1, help='Select a port to run on', \
@@ -117,27 +120,22 @@ def handle_connection(conn, port, app):
 
     # Image app
     elif app == 'imageapp':
-        import quixote
-        import imageapp
-        from imageapp import create_publisher
-        try:
-            p = create_publisher()
-        except RuntimeError:
-            pass
-        imageapp.setup()
-        wsgi_app = quixote.get_wsgi_app() 
+        wsgi_app = make_image_app() 
 
     # Chat app
     elif app == 'chat':
         from chat.apps import ChatApp as make_app 
         wsgi_app = make_app('chat/html')
  
-    #quotes app
+    # quotes app
     elif app == 'quotes':
         from quotes.apps import QuotesApp as make_app 
         wsgi_app = make_app('quotes/quotes.txt', \
                                           'quotes/html')    
-    
+    # cookie app 
+    elif app == 'cookie':
+        wsgi_app = cookieapp.get_wsgi_app()
+
     # My app
     else:
         from app import make_app
