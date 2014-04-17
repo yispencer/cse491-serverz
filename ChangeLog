@@ -89,7 +89,7 @@
 2014-04-17 Seung Yi
 
  * Add project options #8, #9, #15.
- * Projects done(so far pts):
+ * Projects done(so far 45pts):
  3. Swipe a template from oswd.org and put it in place on your imageapp server. (5 pts; browser_app)
  4. Change imageapp to support JPEG and TIFF. (5 pts; app_feature)
  5. Add a URL that provides a list of images, resized to thumbnails. (5 pts; app_feature)
