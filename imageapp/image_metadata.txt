@@ -1,0 +1,5 @@
+lion.jpg|spence|Lion background
+corgi.jpg|esther|esther loves corgis
+coolcat.png|spence|cool cat sees everything
+car.jpg|spence|mustanggg
+smile.TIF|spence|TIF file
