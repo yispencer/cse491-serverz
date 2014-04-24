@@ -12,6 +12,15 @@ class RootDirectory(Directory):
         posts = sqlite.get_comments()
         return html.render('image.html', posts)
 
+    @export(name='increment_score')
+    def increment_score(self):
+        sqlite.increment_image_score()
+        return html.render('image.html')
+
+    @export(name='decrement_score')
+    def decrement_score(self):
+        sqlite.decrement_image_score()
+        return html.render('image.html')
     @export(name='add_comment')
     def add_comment(self):
         request = quixote.get_request()

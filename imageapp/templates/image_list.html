@@ -17,16 +17,21 @@
     <th>Name</th>
     <th>Description</th>
     <th>Owner</th>
+    <th>Score</th>
     <th></th>
   </tr>
-
+  {% set counter = 0 %}
   {% for i in results %}
+    {% if counter == 4 or loop.first %}
+      {% set counter = 0 %}
   <tr>
+  {% endif %}
     <td>
       <a href=update_latest?i={{ i['index'] }}>{{ i['name'] }}</a>
     </td>
     <td valign="top">{{ i['desc'] }}</td>
     <td valign="top">{{ i['owner'] }}</td>
+    <td valign="top">{{ i['score'] }}</td>
     <td valign="top">
       <a href=delete_image?i={{ i['index'] }}>delete</a>
     </td>

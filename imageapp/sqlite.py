@@ -16,8 +16,9 @@ def create_db():
     if not os.path.exists(IMAGES_DB):
         db = sqlite3.connect(IMAGES_DB)
         db.execute('CREATE TABLE image_store ' +
-                   '(i INTEGER PRIMARY KEY, image BLOB, owner TEXT, ' +
-                   'name TEXT, desc TEXT, latest INTEGER DEFAULT 0)')
+                   '(i INTEGER PRIMARY KEY, image BLOB, owner TEXT, \
+                   score INTEGER DEFAULT 0, name TEXT, desc TEXT, \
+                   latest INTEGER DEFAULT 0)')
         db.execute('CREATE TABLE users ' +
                    '(username TEXT PRIMARY KEY, password TEXT)')
         db.execute('CREATE TABLE comments (ci INTEGER PRIMARY KEY, ' +
@@ -45,8 +46,8 @@ def init_load():
     file = open(metadata, 'r')
     cnt = 1
     for line in file:
-        n, o, d = line.split('|')
-        update_metadata(cnt, n, o, d)
+        n, o, d, s = line.split('|')
+        update_metadata(cnt, n, o, d, s)
         cnt +=1
     file.close()
 
@@ -101,12 +102,14 @@ def get_image_list():
     db = sqlite3.connect(IMAGES_DB)
     c = db.cursor()
 
-    c.execute('SELECT i, name, desc, owner FROM image_store ORDER BY i ASC')
+    c.execute('SELECT i, name, desc, owner, score FROM image_store \
+               ORDER BY i ASC')
     for row in c:
         result = {'index' : row[0]}
         result['name'] = row[1]
         result['desc'] = row[2]
         result['owner'] = row[3]
+        result['score'] = row[4]
         img_results['results'].append(result)
     db.close()
 
@@ -247,12 +250,44 @@ def update_latest(form_data):
     img_idx = int(form_data['i'])
     set_latest(img_idx)
 
-def update_metadata(i, file_name, file_owner, file_desc):
+def update_metadata(i, file_name, file_owner, file_desc, file_score):
     db = sqlite3.connect(IMAGES_DB)
-    vars = (file_name, file_owner, file_desc, i)
-    db.execute('UPDATE image_store SET name=?, owner=?, desc=? WHERE i=?', vars)
+    vars = (file_name, file_owner, file_desc, file_score, i)
+    db.execute('UPDATE image_store SET name=?, owner=?, desc=?, score=? \
+                WHERE i=?', vars)
     db.commit()
     db.close()
+
+def increment_image_score():
+    db = sqlite3.connect(IMAGES_DB)
+    # The image being scored on is always the latest
+    c = db.cursor()
+    c.execute('SELECT i FROM image_store WHERE latest=1')
+    row = c.fetchone()
+    i = row[0]  
+    db.execute('UPDATE image_store SET score = score + 1 WHERE i=(?)', (i,))
+    db.commit()
+    db.close()
+
+def decrement_image_score():
+    db = sqlite3.connect(IMAGES_DB)
+    # The image being scored on is always the latest
+    c = db.cursor()
+    c.execute('SELECT i FROM image_store WHERE latest=1')
+    row = c.fetchone()
+    i = row[0]  
+    db.execute('UPDATE image_store SET score = score - 1 WHERE i=(?)', (i,))
+    db.commit()
+    db.close()
+
+def get_num_images():
+    db = sqlite3.connect(IMAGES_DB)
+    c = db.cursor()
+    c.execute('SELECT i FROM image_store ORDER BY i DESC LIMIT 1')
+    try:
+        return int(c.fetchone()[0])
+    except:
+        return 0
 
 # Users must be logged in to upload images
 def upload_image(f_data, f_name, f_owner, f_desc):
