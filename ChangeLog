@@ -99,3 +99,9 @@
  9. Add username login via cookies and tracking of image by ¡°owner¡± (the person who uploaded it). Allow the owner to delete it. (5 pts.; app_feature)
  15. Add account creation, login, and authentication (5 pts; app_feature)
  23. Write a URL handler so that each image is referred to by its number, e.g. /image_raw/10; make it so that going to the latest image in your imageapp redirects to the right image number. (5 pts; app_feature)
+
+2014-04-24 Seung Yi
+
+ * Working on the last project. Project #27 Ranking system
+ * Images now have scores which is determined by Likes and Dislikes
+ * Imagelist is broken.. gotta fix it

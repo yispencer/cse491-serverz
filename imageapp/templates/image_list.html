@@ -22,10 +22,6 @@
   </tr>
   {% set counter = 0 %}
   {% for i in results %}
-    {% if counter == 4 or loop.first %}
-      {% set counter = 0 %}
-  <tr>
-  {% endif %}
     <td>
       <a href=update_latest?i={{ i['index'] }}>{{ i['name'] }}</a>
     </td>
