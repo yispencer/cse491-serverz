@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html">
-    <style type="text/css">{% include "layout.css" %}</style>
-  </head>
-  
-  <body>
+{% extends "base.html" %}
+
+{% block content %}
     <div id="container">
       <div id="banner">
         <div id="bannertitle">CSS Layout Template</div>
@@ -20,20 +15,20 @@
               <input type='submit'>
               </form>
 
-</body>            </div>
+      </div>
           </div>
 
           <div id="content">
 <img width=40% src='latest_image?t={{ time }}'/>
 <h1>Name: {{ name }}</h1>
 <h1>Description: {{ description }}</h1>
-{% block content %}
-{% endblock %}
+
+<a href='imageapp_list'>Click here to see all images uploaded.</a>
+
 
           </div>
         </div>
       </div>
       <div id="footer"></div>
     </div>
-  </body>
-</html>
+{% endblock %}

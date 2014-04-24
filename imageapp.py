@@ -71,6 +71,19 @@ def image_app(environ, start_response):
         vars['time'] = time.time()
         start_response('200 OK', [('Content-type', 'text/html')])
         ret = render_template(env, 'imageapp.html', vars)
+
+    elif path == 'imageapp_list':
+        db = sqlite3.connect('images.sqlite')
+        db.text_factory = bytes
+        c = db.cursor()
+        c.execute('SELECT iid, name, description, user_id FROM image_store ORDER BY iid DESC LIMIT 1')
+        iid, name, description, user_id = c.fetchone()
+        vars['iid'] = iid
+        vars['name'] = name
+        vars['description'] = description
+        vars['time'] = time.time()
+        start_response('200 OK', [('Content-type', 'text/html')])
+        ret = render_template(env, 'imageapp.html', vars)
     elif path.startswith('/latest_image'):
         db = sqlite3.connect('images.sqlite')
 
